@@ -1,43 +1,60 @@
-const express = require('express');
-const passport = require('passport');
-const { PrismaClient } = require('@prisma/client');
-const { hashPassword } = require('../utils/auth');
+const express = require("express");
+const passport = require("passport");
+const { PrismaClient } = require("@prisma/client");
+const { hashPassword } = require("../utils/auth");
 
 const router = express.Router();
 const prisma = new PrismaClient();
 
 // Register Route
-router.post('/register', async (req, res) => {
+router.get("/register", (req, res) => {
+  res.render("auth/register", { title: "Register", error: null });
+});
+
+router.post("/register", async (req, res) => {
   const { email, password } = req.body;
   const hashedPassword = await hashPassword(password);
 
   try {
-    const user = await prisma.user.create({
+    const hashedPassword = await hashPassword(password);
+    await prisma.user.create({
       data: { email, password: hashedPassword },
     });
-    res.json({ message: 'User registered', user });
+    res.redirect("/auth/login");
   } catch (error) {
-    res.status(400).json({ error: 'Email already exists' });
+    res.render("auth/register", {
+      title: "Register",
+      error: "Email already exists",
+    });
   }
 });
 
 // Login Route
-router.post('/login', passport.authenticate('local'), (req, res) => {
-  res.json({ message: 'Logged in successfully', user: req.user });
+router.get("/login", (req, res) => {
+  res.render("auth/login", { title: "Login", error: null });
+});
+
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/auth/profile",
+    failureRedirect: "/auth/login",
+    failureMessage: true,
+  })
+);
+
+// Profile Route
+router.get("/profile", (req, res) => {
+  if (!req.isAuthenticated()) return res.redirect("/auth/login");
+  res.render("auth/profile", { title: "Profile", user: req.user });
 });
 
 // Logout Route
-router.get('/logout', (req, res) => {
+router.get("/logout", (req, res) => {
   req.logout((err) => {
-    if (err) return res.status(500).json({ error: 'Logout failed' });
-    res.json({ message: 'Logged out' });
+    if (err) return res.status(500).send("Logout failed");
+    res.redirect("/auth/login");
   });
-});
-
-// Protected Route Example
-router.get('/profile', (req, res) => {
-  if (!req.isAuthenticated()) return res.status(401).json({ error: 'Not authenticated' });
-  res.json({ message: 'Welcome to your profile', user: req.user });
 });
 
 module.exports = router;

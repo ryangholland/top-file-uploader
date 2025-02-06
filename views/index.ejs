@@ -1,0 +1,12 @@
+
+
+<h1>Welcome to Our App</h1>
+
+<% if (user) { %>
+<p>Hello, <strong><%= user.email %></strong>!</p>
+<a href="/auth/profile">Go to Your Profile</a>
+<br />
+<a href="/auth/logout">Logout</a>
+<% } else { %>
+<p>Welcome, guest! Please log in or register to access more features.</p>
+<a href="/auth/login">Login</a> | <a href="/auth/register">Register</a> <% } %>
