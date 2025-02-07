@@ -3,12 +3,14 @@ const expressLayouts = require("express-ejs-layouts");
 const session = require("express-session");
 const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
 const { PrismaClient } = require("@prisma/client");
-const passport = require("./auth/passportConfig");
+const passport = require("./config/passportConfig");
 
 const indexRoutes = require("./routes/indexRoutes");
 const authRoutes = require("./routes/authRoutes");
 const uploadRoutes = require("./routes/uploadRoutes")
 const storageRoutes = require("./routes/storageRoutes");
+
+require("dotenv").config();
 
 const prisma = new PrismaClient();
 const app = express();
