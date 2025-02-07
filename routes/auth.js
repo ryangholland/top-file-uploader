@@ -1,57 +1,27 @@
 const express = require("express");
-const passport = require("passport");
-const { PrismaClient } = require("@prisma/client");
-const { hashPassword } = require("../utils/auth");
-
 const router = express.Router();
-const prisma = new PrismaClient();
+const passport = require("passport");
 
-// Register Route
-router.get("/register", (req, res) => {
-  res.render("auth/register", { title: "Register", error: null });
-});
+const {
+  getRegister,
+  createUser,
+  getLogin,
+  getLogout,
+} = require("../controllers/authController");
 
-router.post("/register", async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const hashedPassword = await hashPassword(password);
-    const newUser = await prisma.user.create({
-      data: { email, password: hashedPassword },
-    });
-
-    req.login(newUser, (err) => {
-      if (err) return res.redirect("/auth/login");
-      return res.redirect("/");
-    });
-  } catch (error) {
-    res.render("auth/register", {
-      title: "Register",
-      error: "Email already exists",
-    });
-  }
-});
+// Register Routes
+router.get("/register", getRegister);
+router.post("/register", createUser);
 
 // Login Route
-router.get("/login", (req, res) => {
-  res.render("auth/login", { title: "Login", error: null });
-});
-
-router.post(
-  "/login",
-  passport.authenticate("local", {
+router.get("/login", getLogin);
+router.post("/login", passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/auth/login",
     failureMessage: true,
-  })
-);
+  }));
 
 // Logout Route
-router.get("/logout", (req, res) => {
-  req.logout((err) => {
-    if (err) return res.status(500).send("Logout failed");
-    res.redirect("/auth/login");
-  });
-});
+router.get("/logout", getLogout);
 
 module.exports = router;
