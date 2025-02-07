@@ -13,7 +13,6 @@ router.get("/register", (req, res) => {
 
 router.post("/register", async (req, res) => {
   const { email, password } = req.body;
-  const hashedPassword = await hashPassword(password);
 
   try {
     const hashedPassword = await hashPassword(password);

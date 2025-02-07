@@ -4,13 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title %></title>
-    
-    
   </head>
   <body>
     <nav>
       <a href="/">Home</a>
       <% if (user) { %>
+      <a href="/upload">Upload</a>
       <a href="/auth/profile">Profile</a>
       <a href="/auth/logout">Logout</a>
       <% } else { %>

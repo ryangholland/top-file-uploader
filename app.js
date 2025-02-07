@@ -5,8 +5,9 @@ const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
 const { PrismaClient } = require("@prisma/client");
 const passport = require("./auth/passportConfig");
 
-const indexRoutes = require("./routes/index")
+const indexRoutes = require("./routes/index");
 const authRoutes = require("./routes/auth");
+const uploadRoutes = require("./routes/upload");
 
 const prisma = new PrismaClient();
 const app = express();
@@ -14,7 +15,7 @@ const app = express();
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
 app.use(expressLayouts);
-app.set("layout", "layouts/layout"); 
+app.set("layout", "layouts/layout");
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -40,8 +41,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/', indexRoutes);
+app.use("/", indexRoutes);
 app.use("/auth", authRoutes);
+app.use("/upload", uploadRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(3000, () => console.log(`App listening on port ${PORT}...`));
