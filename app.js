@@ -5,10 +5,10 @@ const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
 const { PrismaClient } = require("@prisma/client");
 const passport = require("./auth/passportConfig");
 
-const indexRoutes = require("./routes/index");
-const authRoutes = require("./routes/auth");
-const uploadRoutes = require("./routes/upload")
-const storageRoutes = require("./routes/storage");
+const indexRoutes = require("./routes/indexRoutes");
+const authRoutes = require("./routes/authRoutes");
+const uploadRoutes = require("./routes/uploadRoutes")
+const storageRoutes = require("./routes/storageRoutes");
 
 const prisma = new PrismaClient();
 const app = express();

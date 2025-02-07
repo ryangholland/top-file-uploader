@@ -1,18 +1,15 @@
-const express = require("express");
-const router = express.Router();
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const isAuth = require("../middleware/isAuth");
 
-router.get("/", isAuth, async (req, res) => {
+async function getStorage(req, res) {
   const folders = await prisma.folder.findMany({
     where: { userId: req.user.id },
   });
 
   res.render("storage", { title: "Storage", user: req.user, folders });
-});
+}
 
-router.post("/add", isAuth, async (req, res) => {
+async function createFolder(req, res) {
   const { name } = req.body;
   if (!name) return res.redirect("/storage");
 
@@ -21,9 +18,9 @@ router.post("/add", isAuth, async (req, res) => {
   });
 
   res.redirect("/storage");
-});
+}
 
-router.post("/edit/:id", isAuth, async (req, res) => {
+async function updateFolder(req, res) {
   const { id } = req.params;
   const { name } = req.body;
   await prisma.folder.update({
@@ -32,15 +29,15 @@ router.post("/edit/:id", isAuth, async (req, res) => {
   });
 
   res.redirect("/storage");
-});
+}
 
-router.post("/delete/:id", isAuth, async (req, res) => {
+async function deleteFolder(req, res) {
   const { id } = req.params;
   await prisma.folder.delete({
     where: { id },
   });
 
   res.redirect("/storage");
-});
+}
 
-module.exports = router;
+module.exports = { getStorage, createFolder, updateFolder, deleteFolder };
