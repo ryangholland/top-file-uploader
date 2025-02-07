@@ -7,7 +7,8 @@ const passport = require("./auth/passportConfig");
 
 const indexRoutes = require("./routes/index");
 const authRoutes = require("./routes/auth");
-const uploadRoutes = require("./routes/upload");
+const uploadRoutes = require("./routes/upload")
+const storageRoutes = require("./routes/storage");
 
 const prisma = new PrismaClient();
 const app = express();
@@ -44,6 +45,7 @@ app.use((req, res, next) => {
 app.use("/", indexRoutes);
 app.use("/auth", authRoutes);
 app.use("/upload", uploadRoutes);
+app.use("/storage", storageRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(3000, () => console.log(`App listening on port ${PORT}...`));
