@@ -16,10 +16,14 @@ router.post("/register", async (req, res) => {
 
   try {
     const hashedPassword = await hashPassword(password);
-    await prisma.user.create({
+    const newUser = await prisma.user.create({
       data: { email, password: hashedPassword },
     });
-    res.redirect("/auth/login");
+
+    req.login(newUser, (err) => {
+      if (err) return res.redirect("/auth/login");
+      return res.redirect("/");
+    });
   } catch (error) {
     res.render("auth/register", {
       title: "Register",
@@ -36,17 +40,11 @@ router.get("/login", (req, res) => {
 router.post(
   "/login",
   passport.authenticate("local", {
-    successRedirect: "/auth/profile",
+    successRedirect: "/",
     failureRedirect: "/auth/login",
     failureMessage: true,
   })
 );
-
-// Profile Route
-router.get("/profile", (req, res) => {
-  if (!req.isAuthenticated()) return res.redirect("/auth/login");
-  res.render("auth/profile", { title: "Profile", user: req.user });
-});
 
 // Logout Route
 router.get("/logout", (req, res) => {
