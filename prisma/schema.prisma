@@ -8,9 +8,10 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
+  id       String   @id @default(uuid())
+  email    String   @unique
   password String
+  folders  Folder[]
 }
 
 model Session {
@@ -18,4 +19,22 @@ model Session {
   sid       String   @unique
   data      String
   expiresAt DateTime
+}
+
+model Folder {
+  id        String   @id @default(uuid())
+  name      String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  files     File[]
+  createdAt DateTime @default(now())
+}
+
+model File {
+  id         String   @id @default(uuid())
+  name       String
+  size       Int
+  uploadTime DateTime @default(now())
+  folder     Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  folderId   String
 }
