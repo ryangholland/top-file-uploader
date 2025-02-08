@@ -1,10 +1,57 @@
-<h1>File Uploader</h1>
+<div class="container d-flex flex-column align-items-center">
+  <h1 class="display-3 text-center mt-5">FileUploader</h1>
 
-<% if (user) { %>
-<p>Hello, <strong><%= user.email %></strong>!</p>
-<a href="/storage">Go to Your Storage</a>
-<br />
-<a href="/auth/logout">Logout</a>
-<% } else { %>
-<p>Welcome, guest! Please log in or register to access more features.</p>
-<a href="/auth/login">Login</a> | <a href="/auth/register">Register</a> <% } %>
+  <p class="lead text-center mt-3 mb-4 index-p">
+    A simple and secure platform to upload and manage your files with ease.
+    Upload, store, and access your files from anywhere.
+  </p>
+
+  <% if (user) { %>
+  <a href="/storage" class="btn btn-primary btn-lg">Go to Storage</a>
+  <% } else { %>
+  <a href="/auth/login" class="btn btn-primary btn-lg">Get Started</a>
+  <% } %>
+
+  <!-- Information Cards -->
+  <div class="row row-cols-1 row-cols-md-3 g-4 mt-3">
+    <!-- Card 1 -->
+    <div class="col">
+      <div class="card p-3">
+        
+        <div class="card-body">
+          <h5 class="card-title fw-bold">Secure File Storage</h5>
+          <p class="card-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
+            pretium sollicitudin dolor.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- Card 2 -->
+    <div class="col">
+      <div class="card p-3">
+    
+        <div class="card-body">
+          <h5 class="card-title fw-bold">Easy File Management</h5>
+          <p class="card-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
+            pretium sollicitudin dolor.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- Card 3 -->
+    <div class="col">
+      <div class="card p-3">
+
+        <div class="card-body">
+          <h5 class="card-title fw-bold">Access Anywhere</h5>
+          <p class="card-text">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur
+            pretium sollicitudin dolor.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

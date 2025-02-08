@@ -6,3 +6,8 @@
   transform: scale(1.2);
   opacity: 0.8;
 }
+
+.index-p {
+  max-width: 600px;
+  margin: 0 auto;
+}
