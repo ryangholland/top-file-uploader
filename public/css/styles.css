@@ -1,0 +1,8 @@
+.github-logo {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.github-logo:hover {
+  transform: scale(1.2);
+  opacity: 0.8;
+}

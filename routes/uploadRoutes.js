@@ -22,6 +22,10 @@ router.post("/", isAuth, upload.single("file"), async (req, res) => {
   console.log(req.file);
 
   const { originalname, buffer, mimetype, size } = req.file;
+  // Code below is for files w/o folder
+  // If a file should be placed in a folder, need to somehow
+  // modify file path to include it at the start
+  // i.e., `{foldername}/${Date.now()}_${originalname}
   const filePath = `/${Date.now()}_${originalname}`;
 
   // Upload to Supabase Storage

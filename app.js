@@ -7,13 +7,16 @@ const passport = require("./config/passportConfig");
 
 const indexRoutes = require("./routes/indexRoutes");
 const authRoutes = require("./routes/authRoutes");
-const uploadRoutes = require("./routes/uploadRoutes")
+const uploadRoutes = require("./routes/uploadRoutes");
 const storageRoutes = require("./routes/storageRoutes");
 
 require("dotenv").config();
 
 const prisma = new PrismaClient();
 const app = express();
+
+app.use("/node_modules", express.static("node_modules"));
+app.use(express.static('public'));
 
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
