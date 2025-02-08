@@ -1,12 +1,33 @@
+<h2 class="text-center mb-4 mt-5">Register</h2>
 
-<h2>Register</h2>
 <% if (error) { %>
-<p style="color: red"><%= error %></p>
+<div class="alert alert-danger w-600 mb-3" role="alert"><%= error %></div>
 <% } %>
-<form action="/auth/register" method="POST">
-  <label>Email:</label>
-  <input type="email" name="email" required />
-  <label>Password:</label>
-  <input type="password" name="password" required />
-  <button type="submit">Register</button>
+
+<form
+  action="/auth/register"
+  method="POST"
+  class="container col-md-6 col-lg-4 p-4 border rounded shadow"
+>
+  <div class="mb-3">
+    <label for="email" class="form-label">Email:</label>
+    <input type="email" name="email" id="email" class="form-control" required />
+  </div>
+
+  <div class="mb-3">
+    <label for="password" class="form-label">Password:</label>
+    <input
+      type="password"
+      name="password"
+      id="password"
+      class="form-control"
+      required
+    />
+  </div>
+
+  <button type="submit" class="btn btn-primary w-100">Register</button>
 </form>
+
+<p class="text-center mt-3">
+  Already have an account? <a href="/auth/login">Log in here</a>
+</p>
