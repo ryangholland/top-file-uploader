@@ -1,4 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
+const supabase = require("../config/supabase");
 const prisma = new PrismaClient();
 
 async function getStorage(req, res) {
@@ -6,7 +7,19 @@ async function getStorage(req, res) {
     where: { userId: req.user.id },
   });
 
-  res.render("storage", { title: "Storage", user: req.user, folders });
+  const dbfiles = await prisma.file.findMany({
+    where: { userId: req.user.id },
+  });
+
+  const files = dbfiles.map((file) => ({
+    ...file,
+    url: supabase.storage.from("Uploads").getPublicUrl(file.path).data
+      .publicUrl,
+  }));
+
+  console.log(files)
+
+  res.render("storage", { title: "Storage", user: req.user, folders, files });
 }
 
 async function createFolder(req, res) {

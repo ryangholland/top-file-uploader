@@ -22,7 +22,7 @@ router.post("/", isAuth, upload.single("file"), async (req, res) => {
   console.log(req.file);
 
   const { originalname, buffer, mimetype, size } = req.file;
-  const filePath = `uploads/${Date.now()}_${originalname}`;
+  const filePath = `/${Date.now()}_${originalname}`;
 
   // Upload to Supabase Storage
   const { data, error } = await supabase.storage
