@@ -29,6 +29,11 @@ model Folder {
   userId    String
   files     File[]
   createdAt DateTime @default(now())
+
+  // Self-referencing relation for parent folder
+  parentId String? // Nullable: Root folder has no parent
+  parent   Folder?  @relation("ParentChild", fields: [parentId], references: [id], onDelete: Cascade)
+  children Folder[] @relation("ParentChild")
 }
 
 model File {
