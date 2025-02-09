@@ -36,7 +36,7 @@ async function getLogin(req, res) {
 async function getLogout(req, res) {
   req.logout((err) => {
     if (err) return res.status(500).send("Logout failed");
-    res.redirect("/auth/login");
+    res.redirect("/");
   });
 }
 

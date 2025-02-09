@@ -16,7 +16,7 @@ router.post("/register", createUser);
 // Login Route
 router.get("/login", getLogin);
 router.post("/login", passport.authenticate("local", {
-    successRedirect: "/",
+    successRedirect: "/storage",
     failureRedirect: "/auth/login",
     failureMessage: true,
   }));
