@@ -46,7 +46,7 @@ async function getStorage(req, res) {
     folder,
     subFolders,
     files,
-    parentFolder: req.session.parentFolder,
+    parentFolder: req.session.folderId,
   });
 }
 
@@ -87,10 +87,59 @@ async function deleteFolder(req, res) {
   res.redirect("/storage");
 }
 
+async function uploadFile(req, res) {
+  if (!req.file) {
+    // TODO: Display error to user in modal
+    res.redirect("/storage");
+  }
+
+  console.log(req.file);
+
+  const { originalname, buffer, mimetype, size } = req.file;
+  const filePath = `/${Date.now()}_${originalname}`;
+
+  // Upload to Supabase Storage
+  const { data, error } = await supabase.storage
+    .from("Uploads")
+    .upload(filePath, buffer, { contentType: mimetype });
+
+  console.log("Supabase upload response:", { data, error });
+
+  if (error) {
+    // TODO: Display error to user in modal
+    res.redirect("/storage");
+  }
+
+  // Save file metadata in Prisma
+  await prisma.file.create({
+    data: {
+      name: originalname,
+      path: filePath,
+      userId: req.user.id,
+      size: size,
+      folderId: req.session.currentFolder,
+    },
+  });
+
+  // to get supabase URL:
+  // url: supabase.storage.from("Uploads").getPublicUrl(file.path).data.publicUrl
+
+  // TODO: Display success message to user
+  console.log(`${originalname} uploaded successfully!`);
+
+  // TODO: Better way to do this?
+  if (req.session.currentFolder) {
+    res.redirect(`/storage/${req.session.currentFolder}`);
+  } else {
+    res.redirect("/storage");
+  }
+}
+
 module.exports = {
   getCurrentFolder,
   getStorage,
   createFolder,
   updateFolder,
   deleteFolder,
+  uploadFile,
 };

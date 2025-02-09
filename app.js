@@ -7,7 +7,6 @@ const passport = require("./config/passportConfig");
 
 const indexRoutes = require("./routes/indexRoutes");
 const authRoutes = require("./routes/authRoutes");
-const uploadRoutes = require("./routes/uploadRoutes");
 const storageRoutes = require("./routes/storageRoutes");
 
 require("dotenv").config();
@@ -16,7 +15,7 @@ const prisma = new PrismaClient();
 const app = express();
 
 app.use("/node_modules", express.static("node_modules"));
-app.use(express.static('public'));
+app.use(express.static("public"));
 
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/views");
@@ -44,13 +43,12 @@ app.use(passport.session());
 
 app.use((req, res, next) => {
   res.locals.user = req.user || null;
-  console.log(res.locals.user)
+  console.log(res.locals.user);
   next();
 });
 
 app.use("/", indexRoutes);
 app.use("/auth", authRoutes);
-app.use("/upload", uploadRoutes);
 app.use("/storage", storageRoutes);
 
 const PORT = process.env.PORT || 3000;
