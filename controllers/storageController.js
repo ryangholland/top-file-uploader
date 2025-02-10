@@ -42,7 +42,6 @@ async function getStorage(req, res) {
     },
   });
 
-  // Need to fix this so root folders display in root
   const files = await prisma.file.findMany({
     where: {
       folderId: folderId === "root" ? null : folderId,
@@ -142,6 +141,24 @@ async function uploadFile(req, res) {
 }
 
 // TODO: GET file -> display file info page
+async function getFile(req, res) {
+  const fileId = req.params.fileId;
+
+  const file = await prisma.file.findUnique({
+    where: {
+      id: fileId,
+    },
+  });
+
+  if (!file) {
+    return res.status(404).send("File not found");
+  }
+
+  res.render("file", {
+    title: "File Information",
+    file
+  });
+}
 
 module.exports = {
   getCurrentFolder,
@@ -150,4 +167,5 @@ module.exports = {
   updateFolder,
   deleteFolder,
   uploadFile,
+  getFile,
 };

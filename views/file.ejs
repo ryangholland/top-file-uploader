@@ -5,10 +5,10 @@
   <!-- File Details Card -->
   <div class="card shadow-lg w-600">
     <div class="card-body">
-      <h4 class="card-title text-center">File Name</h4>
+      <h4 class="card-title text-center">📄 <%= file.name %></h4>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item"><strong>Size:</strong> 1.2 MB</li>
-        <li class="list-group-item"><strong>Created:</strong> 3 days ago</li>
+        <li class="list-group-item"><strong>Size: </strong><%= (file.size / 1024).toFixed(2) %> KB</li>
+        <li class="list-group-item"><strong>Created: </strong><%= file.uploadTime.toLocaleString() %></li>
         <li class="list-group-item">
           <strong>Last Updated:</strong> Yesterday
         </li>
