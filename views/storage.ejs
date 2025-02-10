@@ -83,7 +83,7 @@
       <% }); %> <% } %>
 
       <!-- Example File -->
-      <tr>
+      <!-- <tr>
         <td>report.pdf</td>
         <td>1.2 MB</td>
         <td>2025-02-08 2:30 PM</td>
@@ -92,7 +92,31 @@
           <a href="#" class="btn btn-sm btn-warning">Edit</a>
           <a href="#" class="btn btn-sm btn-danger">Delete</a>
         </td>
+      </tr> -->
+
+      <!-- Display Files -->
+      <% if (files.length > 0) { %> <% files.forEach(file => { %>
+      <tr>
+        <td>
+          <a href="/storage/file/<%= file.id %>" class="text-decoration-none">
+            📄 <%= file.name %>
+          </a>
+        </td>
+        <td><%= (file.size / 1024).toFixed(2) %> KB</td>
+        <td><%= file.uploadTime.toLocaleString() %></td>
+        <td>-</td>
+        <td>
+          <a
+            href="/storage/download/<%= file.id %>"
+            class="btn btn-sm btn-primary"
+            >Download</a
+          >
+          <a href="#" class="btn btn-sm btn-warning">Edit</a>
+          <a href="#" class="btn btn-sm btn-danger">Delete</a>
+        </td>
       </tr>
+      <% }); %> <% } %>
+
       <tr>
         <td colspan="5" class="text-center text-muted">
           No more files or folders.

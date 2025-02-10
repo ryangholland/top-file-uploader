@@ -41,9 +41,11 @@ async function getStorage(req, res) {
       parentId: folderId === "root" ? null : folderId,
     },
   });
+
+  // Need to fix this so root folders display in root
   const files = await prisma.file.findMany({
     where: {
-      folderId,
+      folderId: folderId === "root" ? null : folderId,
     },
   });
 
@@ -113,6 +115,7 @@ async function uploadFile(req, res) {
     res.redirect("/storage");
   }
 
+  console.log(req.session.currentFolder);
   // Save file metadata in Prisma
   await prisma.file.create({
     data: {
@@ -137,6 +140,8 @@ async function uploadFile(req, res) {
     res.redirect("/storage");
   }
 }
+
+// TODO: GET file -> display file info page
 
 module.exports = {
   getCurrentFolder,
