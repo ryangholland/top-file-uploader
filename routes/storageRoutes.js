@@ -12,7 +12,8 @@ const {
   updateFolder,
   deleteFolder,
   uploadFile,
-  getFile
+  getFile,
+  downloadFile,
 } = require("../controllers/storageController");
 
 router.get("/:folderId", isAuth, getCurrentFolder);
@@ -24,6 +25,8 @@ router.post("/delete-folder/:id", isAuth, deleteFolder);
 
 router.post("/upload-file", isAuth, upload.single("file"), uploadFile);
 
-router.get("/file/:fileId", isAuth, getFile)
+router.get("/file/:fileId", isAuth, getFile);
+
+router.get("/download/:fileId", isAuth, downloadFile);
 
 module.exports = router;
