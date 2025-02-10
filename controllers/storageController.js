@@ -4,6 +4,13 @@ const prisma = new PrismaClient();
 
 async function getCurrentFolder(req, res) {
   const folderId = req.params.folderId;
+
+  if (folderId === "root") {
+    req.session.currentFolder = null;
+    req.session.parentFolder = null;
+    return res.redirect("/storage");
+  }
+
   const folder = await prisma.folder.findUnique({
     where: {
       id: folderId,
@@ -28,9 +35,10 @@ async function getStorage(req, res) {
       id: folderId,
     },
   });
+
   const subFolders = await prisma.folder.findMany({
     where: {
-      parentId: folderId,
+      parentId: folderId === "root" ? null : folderId,
     },
   });
   const files = await prisma.file.findMany({
@@ -39,14 +47,11 @@ async function getStorage(req, res) {
     },
   });
 
-  console.log({ folder, subFolders, files });
-
   res.render("storage", {
     title: "Storage",
     folder,
     subFolders,
     files,
-    parentFolder: req.session.folderId,
   });
 }
 
@@ -58,7 +63,7 @@ async function createFolder(req, res) {
     data: {
       name: folderName,
       userId: req.user.id,
-      parentId: req.session.parentFolder,
+      parentId: req.session.currentFolder,
     },
   });
 
@@ -92,8 +97,6 @@ async function uploadFile(req, res) {
     // TODO: Display error to user in modal
     res.redirect("/storage");
   }
-
-  console.log(req.file);
 
   const { originalname, buffer, mimetype, size } = req.file;
   const filePath = `/${Date.now()}_${originalname}`;
