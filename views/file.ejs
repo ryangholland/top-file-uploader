@@ -7,14 +7,21 @@
     <div class="card-body">
       <h4 class="card-title text-center">📄 <%= file.name %></h4>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item"><strong>Size: </strong><%= (file.size / 1024).toFixed(2) %> KB</li>
-        <li class="list-group-item"><strong>Created: </strong><%= file.uploadTime.toLocaleString() %></li>
         <li class="list-group-item">
-          <strong>Last Updated:</strong> Yesterday
+          <strong>Size: </strong><%= (file.size / 1024).toFixed(2) %> KB
+        </li>
+        <li class="list-group-item">
+          <strong>Created: </strong><%= file.uploadTime.toLocaleString() %>
+        </li>
+        <li class="list-group-item">
+          <strong>Last Updated:</strong> <%= file.updatedAt ?
+          file.updatedAt.toLocaleString() : "-" %>
         </li>
       </ul>
       <div class="text-center mt-3">
-        <a href="/storage/download/<%= file.id %>" class="btn btn-primary">Download File</a>
+        <a href="/storage/download/<%= file.id %>" class="btn btn-primary"
+          >Download File</a
+        >
       </div>
     </div>
   </div>

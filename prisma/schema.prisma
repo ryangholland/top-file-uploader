@@ -29,6 +29,7 @@ model Folder {
   userId    String
   files     File[]
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 
   // Self-referencing relation for parent folder
   parentId String? // Nullable: Root folder has no parent
@@ -41,6 +42,7 @@ model File {
   name       String
   size       Int
   uploadTime DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
   path       String   @unique // Stores the Supabase file path
   folder     Folder?  @relation(fields: [folderId], references: [id], onDelete: Cascade)
   folderId   String?
