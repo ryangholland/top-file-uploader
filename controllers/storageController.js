@@ -72,26 +72,24 @@ async function createFolder(req, res) {
   res.redirect("/storage");
 }
 
-// TODO : updateFolder
 async function updateFolder(req, res) {
-  // const { id } = req.params;
-  // const { name } = req.body;
-  // await prisma.folder.update({
-  //   where: { id },
-  //   data: { name },
-  // });
-
-  res.redirect("/storage");
+  const { folderId, folderName } = req.body;
+  await prisma.folder.update({
+    where: { id: folderId },
+    data: { name: folderName },
+  });
+  res.redirect(req.get("Referer") || "/");
 }
 
-// TODO : deleteFolder
 async function deleteFolder(req, res) {
-  // const { id } = req.params;
-  // await prisma.folder.delete({
-  //   where: { id },
-  // });
-
-  res.redirect("/storage");
+  const folderId = req.params.id;
+  try {
+    await prisma.folder.delete({ where: { id: folderId } });
+    res.redirect(req.get("Referer") || "/");
+  } catch (error) {
+    console.error("Error deleting folder:", error);
+    res.redirect(req.get("Referer") || "/");
+  }
 }
 
 async function uploadFile(req, res) {
@@ -137,6 +135,26 @@ async function uploadFile(req, res) {
     res.redirect(`/storage/${req.session.currentFolder}`);
   } else {
     res.redirect("/storage");
+  }
+}
+
+async function updateFile(req, res) {
+  const { fileId, fileName } = req.body;
+  await prisma.file.update({
+    where: { id: fileId },
+    data: { name: fileName },
+  });
+  res.redirect(req.get("Referer") || "/");
+}
+
+async function deleteFile(req, res) {
+  const fileId = req.params.id;
+  try {
+    await prisma.file.delete({ where: { id: fileId } });
+    res.redirect(req.get("Referer") || "/");
+  } catch (error) {
+    console.error("Error deleting file:", error);
+    res.redirect(req.get("Referer") || "/");
   }
 }
 
@@ -190,8 +208,8 @@ async function downloadFile(req, res) {
         }
       });
 
-    // TODO: Make a "View File" button 
-    // TODO: Open in new tab/window  
+    // TODO: Make a "View File" button
+    // TODO: Open in new tab/window
     // Redirect the user to the signed URL to download the file
     // res.redirect(data.signedUrl);
   } catch (err) {
@@ -228,6 +246,8 @@ module.exports = {
   updateFolder,
   deleteFolder,
   uploadFile,
+  updateFile,
+  deleteFile,
   downloadFile,
   getFile,
 };

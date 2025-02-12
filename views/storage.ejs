@@ -86,7 +86,17 @@
           >
             Edit
           </a>
-          <a href="#" class="btn btn-sm btn-danger">Delete</a>
+          <a
+            href="#"
+            class="btn btn-sm btn-danger delete-btn"
+            data-bs-toggle="modal"
+            data-bs-target="#deleteConfirmModal"
+            data-id="<%= folder.id %>"
+            data-name="<%= folder.name %>"
+            data-type="folder"
+          >
+            Delete
+          </a>
         </td>
       </tr>
       <% }); %> <% } %>
@@ -130,7 +140,17 @@
           >
             Edit
           </a>
-          <a href="#" class="btn btn-sm btn-danger">Delete</a>
+          <a
+            href="#"
+            class="btn btn-sm btn-danger delete-btn"
+            data-bs-toggle="modal"
+            data-bs-target="#deleteConfirmModal"
+            data-id="<%= file.id %>"
+            data-name="<%= file.name %>"
+            data-type="file"
+          >
+            Delete
+          </a>
         </td>
       </tr>
       <% }); %> <% } %>
@@ -257,7 +277,7 @@
           aria-label="Close"
         ></button>
       </div>
-      <form action="/storage/edit-folder" method="POST">
+      <form action="/storage/update-folder" method="POST">
         <div class="modal-body">
           <input type="hidden" id="editFolderId" name="folderId" />
           <label for="editFolderName" class="form-label">Folder Name:</label>
@@ -303,7 +323,7 @@
           aria-label="Close"
         ></button>
       </div>
-      <form action="/storage/edit-file" method="POST">
+      <form action="/storage/update-file" method="POST">
         <div class="modal-body">
           <input type="hidden" id="editFileId" name="fileId" />
           <label for="editFileName" class="form-label">File Name:</label>
@@ -330,6 +350,44 @@
   </div>
 </div>
 
+<!-- Delete Confirmation Modal -->
+<div
+  class="modal fade"
+  id="deleteConfirmModal"
+  tabindex="-1"
+  aria-labelledby="deleteConfirmModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog mt-5">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteConfirmModalLabel">
+          Confirm Deletion
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Are you sure you want to delete <strong id="deleteItemName"></strong>?
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <form id="deleteForm" method="POST">
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Bootstrap JS (needed for modal functionality) -->
 <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -351,6 +409,24 @@
         const fileName = this.getAttribute("data-name");
         document.getElementById("editFileId").value = fileId;
         document.getElementById("editFileName").value = fileName;
+      });
+    });
+
+    // Handle Delete Button Click
+    document.querySelectorAll(".delete-btn").forEach((button) => {
+      button.addEventListener("click", function () {
+        const itemId = this.getAttribute("data-id");
+        const itemName = this.getAttribute("data-name");
+        const itemType = this.getAttribute("data-type"); // folder or file
+
+        document.getElementById("deleteItemName").textContent = itemName;
+
+        // Set form action based on item type
+        const deleteForm = document.getElementById("deleteForm");
+        deleteForm.action =
+          itemType === "folder"
+            ? `/storage/delete-folder/${itemId}`
+            : `/storage/delete-file/${itemId}`;
       });
     });
   });
